@@ -6,12 +6,6 @@ inputs:
   webhook-url:
     description: Jira Automation Webhook URL
     required: true
-  project: 
-    description: Project to release
-    required: true
-  release: 
-    description: A semantic version release tag (v1.0.0, v2.3.11, etc)
-    required: true
   tickets:
     description: List of Jira tickets to update from MERGED to DEPLOYED
     required: true
@@ -26,5 +20,5 @@ runs:
       shell: bash
       id: create-release
       run: |
-        OUTPUT="$(python ${GITHUB_WORKSPACE}/.github/actions/make-jira-release/app.py ${{ inputs.webhook-url }} ${{ inputs.project}}-${{ inputs.release }} ${{ inputs.tickets}})"
+        OUTPUT="$(python ${GITHUB_WORKSPACE}/.github/actions/make-jira-release/app.py ${{ inputs.webhook-url }} ${{ github.event.repository.name }}-${{ github.event.release.tag_name }} ${{ inputs.tickets}})"
         echo "output=${OUTPUT}" >> $GITHUB_OUTPUT
