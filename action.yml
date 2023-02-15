@@ -1,7 +1,7 @@
 name: create-jira-release
 description: Create a release in Jira using Jira Automation Webhook
 author: out-of-mana
-inputs: 
+inputs:
   webhook-url:
     description: Jira Automation Webhook URL
     required: true
