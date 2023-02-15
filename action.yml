@@ -5,6 +5,12 @@ inputs:
   webhook-url:
     description: Jira Automation Webhook URL
     required: true
+  project: 
+    description: The project you're cutting a release for
+    default: ${{ github.event.repository.name }}
+  release:
+    description: Release tag (v1.0.0, 2.3.91, etc)
+    default: ${{ github.event.release.tag_name }}
   tickets:
     description: List of Jira tickets to update from MERGED to DEPLOYED
     required: true
@@ -19,5 +25,5 @@ runs:
       shell: bash
       id: create-release
       run: |
-        OUTPUT="$(python ${GITHUB_WORKSPACE}/.github/actions/make-jira-release/app.py ${{ inputs.webhook-url }} ${{ github.event.repository.name }}-${{ github.event.release.tag_name }} ${{ inputs.tickets}})"
+        OUTPUT="$(python ${GITHUB_WORKSPACE}/.github/actions/make-jira-release/app.py ${{ inputs.webhook-url }} ${{ inputs.project }}-${{ inputs.release }} ${{ inputs.tickets}})"
         echo "output=${OUTPUT}" >> $GITHUB_OUTPUT
