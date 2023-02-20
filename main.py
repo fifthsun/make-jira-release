@@ -2,19 +2,17 @@
 
 import sys
 import requests
-
-# Our arguments are release name and an array of tickets.
-# Generate our payload
+import os
 
 payload = {
     'release': {
-        'tag_name': sys.argv[2] # First argument is our release name
+        'tag_name': os.environ.get('INPUT_RELEASE')
     },
-    'issues': sys.argv[3:]      # Everything else is treated as a ticket
+    'issues': os.environ.get('INPUT_TICKETS')
 }
 
 r = requests.post(
-              url=sys.argv[1],
+              url=os.environ.get('INPUT_WEBHOOK-URL'),
               headers={'Content-Type': 'application/json'}, 
               json=payload)
 

@@ -14,16 +14,6 @@ inputs:
   tickets:
     description: List of Jira tickets to update from MERGED to DEPLOYED
     required: true
-outputs:
-  output:
-    description: The output
-    value: ${{ steps.create-release.outputs.output }}
 runs:
-  using: "composite"
-  steps:
-    - name: Create release
-      shell: bash
-      id: create-release
-      run: |
-        OUTPUT="$(python ${GITHUB_WORKSPACE}/.github/actions/make-jira-release/app.py ${{ inputs.webhook-url }} ${{ inputs.project }}-${{ inputs.release }} ${{ inputs.tickets}})"
-        echo "output=${OUTPUT}" >> $GITHUB_OUTPUT
+  using: docker
+  image: Dockerfile
