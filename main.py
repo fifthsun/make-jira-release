@@ -3,12 +3,13 @@
 import sys
 import requests
 import os
+import json
 
 payload = {
     'release': {
         'tag_name': os.environ.get('INPUT_RELEASE')
     },
-    'issues': os.environ.get('INPUT_TICKETS')
+    'issues': list(os.environ.get('INPUT_TICKETS').split(' '))
 }
 
 r = requests.post(
