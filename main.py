@@ -7,7 +7,10 @@ import json
 
 payload = {
     'release': {
-        'tag_name': os.environ.get('INPUT_RELEASE')
+        'tag_name': "{0}-{1}".format(
+            os.environ.get('INPUT_PROJECT'), 
+            os.environ.get('INPUT_RELEASE')
+        )
     },
     'issues': list(os.environ.get('INPUT_TICKETS').split(' '))
 }
