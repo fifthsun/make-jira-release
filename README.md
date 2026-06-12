@@ -2,7 +2,7 @@
 
 This action is for transitioning tickets from
 MERGED to DEPLOYED and will be triggered from 
-release.yml github workflows..
+release.yml github workflows.
 
 You want the tickets in your release to all 
 be deployed otherwise the Jira release won't
@@ -12,6 +12,10 @@ until all the tickets are at a terminus.
 It's made to use the output from
 https://github.com/fifthsun/get-tickets-in-release
 which will automatically figure out that list.
+
+ () ()
+ (o,o)
+(") (")
 
 ## Usage
 ```
