@@ -2,7 +2,7 @@
 
 This action is for transitioning tickets from
 MERGED to DEPLOYED and will be triggered from 
-release.yml github workflows.
+release.yml github workflows..
 
 You want the tickets in your release to all 
 be deployed otherwise the Jira release won't
