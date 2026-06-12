@@ -13,7 +13,7 @@ It's made to use the output from
 https://github.com/fifthsun/get-tickets-in-release
 which will automatically figure out that list.
 
-## Usage
+## Usage:
 ```
   - name: Make Jira release from tickets
     id: make-release
