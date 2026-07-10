@@ -1,4 +1,4 @@
-# make-jira-release v1
+# make-jira-release
 
 This action is for transitioning tickets from
 MERGED to DEPLOYED and will be triggered from 
@@ -33,6 +33,12 @@ which will automatically figure out that list.
 ```
 
 ## Output
-```
-ERROR or SUCCESS
-```
+
+Prints `SUCCESS` when the Jira webhook accepts the release — any `2xx`,
+including the `202 Accepted` that Jira Automation returns. With no tickets, it
+skips and passes.
+
+If the request errors or returns a non-`2xx`, it emits a GitHub Actions
+`::warning::` annotation (including the status code and response body) and
+still exits `0` — so a Jira problem is visible in the run summary but never
+fails an already-completed deploy.
