@@ -15,8 +15,16 @@ REQUEST_TIMEOUT_SECONDS = 30
 
 def warn(message):
     # GitHub Actions warning annotation: visible in the run summary/UI
-    # without failing the job.
-    print("::warning title=Jira release::{0}".format(message))
+    # without failing the job. Workflow commands are single-line, so encode
+    # control chars (a multi-line body such as an HTML 404 page would
+    # otherwise break the annotation and drop the message). Encode '%' first.
+    safe = (
+        str(message)
+        .replace("%", "%25")
+        .replace("\r", "%0D")
+        .replace("\n", "%0A")
+    )
+    print("::warning title=Jira release::{0}".format(safe))
 
 
 # Nothing to send: a release with no tickets is normal (e.g. infra-only
