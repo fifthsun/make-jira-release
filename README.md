@@ -32,6 +32,23 @@ which will automatically figure out that list.
       tickets: ${{ steps.get-tickets-in-release.outputs.tickets }}
 ```
 
+## Docker Hub login
+
+This is a Docker container action built on `python:3-slim` from Docker Hub. On shared
+GitHub runners, anonymous pulls can be rate-limited, so log into Docker Hub earlier in the
+job, e.g. with keyless OIDC (needs `id-token: write`):
+
+```yaml
+- uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # 4.6.0
+  env:
+    DOCKERHUB_OIDC_CONNECTIONID: '87f9554f-b1cc-4f9e-9bf6-11546bc38501'
+  with:
+    username: ${{ vars.DOCKER_USER }}
+```
+
+When this action is used inside a composite action, its image is built when the composite
+starts, so the login step must come before the composite, not inside it.
+
 ## Output
 
 Prints `SUCCESS` when the Jira webhook accepts the release — any `2xx`,
