@@ -16,4 +16,6 @@ inputs:
     required: true
 runs:
   using: docker
-  image: Dockerfile
+  # Prebuilt by .github/workflows/publish-image.yml (sha-7cbc2e1). Pinned by digest so
+  # callers pull a fixed image instead of building the Dockerfile on every run.
+  image: docker://ghcr.io/fifthsun/make-jira-release@sha256:76ede3f4dd04534678a4a370812708a2df80f2fa45a93d5e57ef3db18bb60f23

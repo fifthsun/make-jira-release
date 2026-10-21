@@ -33,28 +33,15 @@ which will automatically figure out that list.
       tickets: ${{ steps.get-tickets-in-release.outputs.tickets }}
 ```
 
-## Docker Hub login
+## Image
 
-This is a Docker container action built on `python:3-slim` from Docker Hub. On shared
-GitHub runners, anonymous pulls can be rate-limited, so log into Docker Hub earlier in the
-job, e.g. with keyless OIDC (needs `id-token: write`):
-
-```yaml
-- uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # 4.6.0
-  env:
-    DOCKERHUB_OIDC_CONNECTIONID: "87f9554f-b1cc-4f9e-9bf6-11546bc38501"
-  with:
-    username: ${{ vars.DOCKER_USER }}
-```
-
-When this action is used inside a composite action, its image is built when the composite
-starts, so the login step must come before the composite, not inside it.
+`action.yml` runs a prebuilt, public image from GHCR
+(`ghcr.io/fifthsun/make-jira-release`), pinned by digest. Callers pull it without logging
+in, and nothing is built at run time, so no Docker Hub login or `id-token: write` is needed.
+Before v2.3.0 the action built its Dockerfile on every run, and callers had to log into
+Docker Hub first to avoid 429s. Callers on v2.3.0 can remove that login step.
 
 ## Publishing the image
-
-The aim is for `action.yml` to reference a prebuilt image on GHCR
-(`ghcr.io/fifthsun/make-jira-release`), so callers pull it instead of building the
-Dockerfile on every run. Until it does, the Docker Hub login above still applies.
 
 `.github/workflows/publish-image.yml` builds and pushes the image whenever
 `Dockerfile`, `main.py` or `requirements.txt` change on `main` (or on manual dispatch).
