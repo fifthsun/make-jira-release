@@ -1,10 +1,10 @@
 # make-jira-release
 
 This action is for transitioning tickets from
-MERGED to DEPLOYED and will be triggered from 
+MERGED to DEPLOYED and will be triggered from
 release.yml github workflows.
 
-You want the tickets in your release to all 
+You want the tickets in your release to all
 be deployed otherwise the Jira release won't
 be 'released', it'll be stuck in 'pre-release'
 until all the tickets are at a terminus.
@@ -14,18 +14,19 @@ https://github.com/fifthsun/get-tickets-in-release
 which will automatically figure out that list.
 
 ## Usage
+
 ```
   - name: Make Jira release from tickets
     id: make-release
     uses: fifthsun/make-jira-release@main
     with:
       # OPTIONAL, will automatically be detected by default
-      project: example 
+      project: example
 
       # OPTIONAL, will automatically be detected by default
-      release: v1.2.0  
+      release: v1.2.0
 
-      # Organization wide secret 
+      # Organization wide secret
       webhook-url: ${{ secrets.JIRA_WEBHOOK_NEW_RELEASE }}
 
       # Space seperated list of tickets e.g. MEG-1023 MEG-2039, ...
@@ -41,13 +42,28 @@ job, e.g. with keyless OIDC (needs `id-token: write`):
 ```yaml
 - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # 4.6.0
   env:
-    DOCKERHUB_OIDC_CONNECTIONID: '87f9554f-b1cc-4f9e-9bf6-11546bc38501'
+    DOCKERHUB_OIDC_CONNECTIONID: "87f9554f-b1cc-4f9e-9bf6-11546bc38501"
   with:
     username: ${{ vars.DOCKER_USER }}
 ```
 
 When this action is used inside a composite action, its image is built when the composite
 starts, so the login step must come before the composite, not inside it.
+
+## Publishing the image
+
+The aim is for `action.yml` to reference a prebuilt image on GHCR
+(`ghcr.io/fifthsun/make-jira-release`), so callers pull it instead of building the
+Dockerfile on every run. Until it does, the Docker Hub login above still applies.
+
+`.github/workflows/publish-image.yml` builds and pushes the image whenever
+`Dockerfile`, `main.py` or `requirements.txt` change on `main` (or on manual dispatch).
+It tags the image `sha-<commit>` and `main`. To release a change:
+
+1. Merge it to `main` and wait for `publish-image` to finish.
+2. Copy the `image: docker://ghcr.io/fifthsun/make-jira-release@sha256:…` line from the
+   run summary into `action.yml`. Pin the digest, not a tag: tags can be moved.
+3. Merge that, then tag a release (`gh release create vX.Y.Z --target main`).
 
 ## Output
 
